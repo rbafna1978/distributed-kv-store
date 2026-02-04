@@ -8,7 +8,6 @@ import com.raftdb.proto.AppendEntriesRequest;
 import com.raftdb.proto.AppendEntriesResponse;
 import com.raftdb.util.Logger;
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
 import java.util.Map;
@@ -30,15 +29,9 @@ public class RaftClient {
     private void initializeChannels() {
         for (String peerId : config.getPeerIds()) {
             int port = config.getPeerPort(peerId);
-            String hostname = peerId;
-            try {
-                java.net.InetAddress.getByName(hostname);
-            } catch (java.net.UnknownHostException e) {
-                hostname = "127.0.0.1";
-            }
-            logger.info("Creating channel to " + peerId + " at " + hostname + ":" + port);
+            logger.info("Creating channel to " + peerId + " at 127.0.0.1:" + port);
             ManagedChannel channel = io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder
-                    .forAddress(new java.net.InetSocketAddress(hostname, port))
+                    .forAddress(new java.net.InetSocketAddress("127.0.0.1", port))
                     .usePlaintext()
                     .build();
             channels.put(peerId, channel);

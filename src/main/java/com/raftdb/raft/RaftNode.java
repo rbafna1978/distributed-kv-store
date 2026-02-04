@@ -143,7 +143,7 @@ public class RaftNode {
             }
 
             AppendEntriesResponse.Builder response = AppendEntriesResponse.newBuilder();
-            response.setTerm(currentTerm);
+            response.setTerm(getCurrentTerm());
 
             if (request.getTerm() < getCurrentTerm()) {
                 return response.setSuccess(false).build();
